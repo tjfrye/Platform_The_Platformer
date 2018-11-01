@@ -8,7 +8,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -17,18 +16,23 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
-public class MainMenu {
+public class MainMenu extends Menu{
 	
-	Scene scene;
-	
-	public MainMenu(int screenW, int screenH){
+	public MainMenu(int screenW, int screenH, Stage window){
+		super(screenW, screenH, window);
 		//create elements for the main menu scene and then add them to the scene
 		Button button_start = createButton("Start");
+		
 		Button button_settings = createButton("Settings");
+		button_settings.setOnAction(e -> {window.setScene(new SettingsMenu(width, height, window).getScene());});
+		
 		Button button_highscores = createButton("Highscores");
+		button_highscores.setOnAction(e -> {window.setScene(new HighscoresMenu(width, height, window).getScene());});
+		
 		Button button_exit = createButton("Exit");
+		button_exit.setOnAction(e -> exitApp());
 		
 		GridPane GP = new GridPane();
 		VBox VB = new VBox(10);
@@ -47,19 +51,7 @@ public class MainMenu {
 			e.printStackTrace();
 		}
 		
-		scene = new Scene(GP, screenW, screenH);
+		s = new Scene(GP, screenW, screenH);
 
 	}
-	
-	public Scene getScene(){
-		return scene;
-	}
-	
-	private Button createButton(String text){
-		Button b = new Button(text);
-		b.setPrefSize(150, 50);
-		
-		return b;
-	}
-
 }
