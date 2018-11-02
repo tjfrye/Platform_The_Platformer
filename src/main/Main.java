@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 
 import javafx.stage.Stage;
 import scenes.MainMenu;
-import scenes.SettingsMenu;
 
 public class Main extends Application {
 
@@ -22,7 +21,6 @@ public class Main extends Application {
 		window = primaryStage;
 		
 		mainMenu = new MainMenu(800, 600, window).getScene();
-		settingsMenu = new SettingsMenu(800, 600, window).getScene();
 		
 		//set the first scene for the window as well as setting its title
 		window.setScene(mainMenu);

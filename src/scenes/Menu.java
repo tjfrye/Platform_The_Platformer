@@ -23,6 +23,10 @@ public abstract class Menu {
 		VBox VB = new VBox();
 		VB.getChildren().add(new Label("Scene has not been implemented yet"));
 		
+		Button b = createButton("Back to Main Menu");
+		b.setOnAction(e -> {window.setScene(new MainMenu(width, height, window).getScene());});
+		VB.getChildren().add(b);
+		
 		GridPane GP = new GridPane();
 		GP.getChildren().add(VB);
 		GP.setAlignment(Pos.CENTER);

@@ -24,6 +24,7 @@ public class MainMenu extends Menu{
 		super(screenW, screenH, window);
 		//create elements for the main menu scene and then add them to the scene
 		Button button_start = createButton("Start");
+		button_start.setOnAction(e -> {window.setScene(new GameScene(width, height, window).getScene());});
 		
 		Button button_settings = createButton("Settings");
 		button_settings.setOnAction(e -> {window.setScene(new SettingsMenu(width, height, window).getScene());});
