@@ -103,12 +103,6 @@ public class GameScene {
 		}.start();
 	}
 	
-	public void outputInput(ArrayList<String> input){
-		for(String s : input){
-			System.out.println(s);
-		}
-	}
-	
 	public Scene getScene(){
 		return scene;
 	}
