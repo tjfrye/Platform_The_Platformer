@@ -42,7 +42,9 @@ public class MainMenu extends Menu{
 		GP.setAlignment(Pos.CENTER);
 				
 		//create and set background image for the main menu
-		Image mm_bg_img;
+		Image mm_bg_img = new Image("file:resources/backgrounds/mm_background.png");
+		GP.setBackground(new Background(new BackgroundImage (mm_bg_img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
+		/*
 		try {
 			mm_bg_img = SwingFXUtils.toFXImage(ImageIO.read(getClass().getResource("/backgrounds/mm_background.png")), null);
 			BackgroundImage mainMenuBackground = new BackgroundImage(mm_bg_img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
@@ -51,6 +53,7 @@ public class MainMenu extends Menu{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		
 		s = new Scene(GP, screenW, screenH);
 

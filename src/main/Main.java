@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 
 import javafx.stage.Stage;
+import scenes.GameScene;
 import scenes.MainMenu;
 
 public class Main extends Application {
