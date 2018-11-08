@@ -12,6 +12,7 @@ public class Sprite{
     private double velocityY;
     private double width;
     private double height;
+    private double maxVelocity;
 
     public Sprite()
     {
@@ -19,6 +20,8 @@ public class Sprite{
         positionY = 0;    
         velocityX = 0;
         velocityY = 0;
+        
+        maxVelocity = 500;
     }
 
     public void setImage(Image i)
@@ -33,23 +36,67 @@ public class Sprite{
         Image i = new Image(filename);
         setImage(i);
     }
+    
+    public double getHeight(){
+    	return height;
+    }
 
     public void setPosition(double x, double y)
     {
         positionX = x;
         positionY = y;
     }
+    
+    public double getPosition_Y(){
+		return positionY;
+    }
+    
+    public double getPosition_X(){
+    	return positionX;
+    }
 
     public void setVelocity(double x, double y)
     {
         velocityX = x;
         velocityY = y;
+        
+        if(velocityX > maxVelocity){
+        	velocityX = maxVelocity;
+        }
+        else if(velocityX < -maxVelocity){
+        	velocityX = -maxVelocity;
+        }
+        
+        if(velocityY > maxVelocity){
+        	velocityY = maxVelocity;
+        }
+        else if(velocityY < -maxVelocity){
+        	velocityY = -maxVelocity;
+        }
     }
 
     public void addVelocity(double x, double y)
     {
         velocityX += x;
         velocityY += y;
+        
+        if(velocityX > maxVelocity){
+        	velocityX = maxVelocity;
+        }
+        else if(velocityX < -maxVelocity){
+        	velocityX = -maxVelocity;
+        }
+        
+        if(velocityY > maxVelocity){
+        	velocityY = maxVelocity;
+        }
+        else if(velocityY < -maxVelocity){
+        	velocityY = -maxVelocity;
+        }
+    }
+    
+    public double getVelocity_X(){
+    	return velocityX;
     }
 
     public void update(double time)

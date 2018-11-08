@@ -59,23 +59,46 @@ public class GameScene {
 			@Override
 			public void handle(long now) {
 				handleKeyboardInput(input);
+				renderScreen();
 			}
 			
+			private void renderScreen() {
+				gc.clearRect(0, 0, screenW, screenH);
+				
+				player.render(gc);
+				
+			}
+
 			private void handleKeyboardInput(ArrayList<String> input) {
+				
+				double elapsedTime = 0.01;
 				//held keys
 				if(input.contains("LEFT")){
-					System.out.println("Player moving left");
+					player.addVelocity(-10, 0);
 				}
-				if(input.contains("RIGHT")){
-					System.out.println("Player moving right");
+				else if(input.contains("RIGHT")){
+					player.addVelocity(10, 0);
+				}
+				else{
+					player.addVelocity(player.getVelocity_X() * -1, 0);
 				}
 				
 				//pressed and released keys
 				if(released.contains("SPACE")){
-					System.out.println("Player Jumped");
+					player.addVelocity(0, -300);
 					released.remove("SPACE");
 				}
+				else{
+					if(player.getPosition_Y() < (screenH - player.getHeight())){
+						player.addVelocity(0, 5);
+					}
+					else if(player.getPosition_Y() > (screenH - player.getHeight())){
+						player.setPosition(player.getPosition_X(), (screenH - player.getHeight()));
+						player.addVelocity(player.getVelocity_X(), 0);
+					}
+				}
 				
+				player.update(elapsedTime);
 			}
 		}.start();
 	}
