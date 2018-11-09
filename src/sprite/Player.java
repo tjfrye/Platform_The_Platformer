@@ -31,5 +31,11 @@ public class Player extends Sprite{
         positionX += velocityX * time;
         positionY += velocityY * time;
     }
+    
+    @Override
+    public String toString(){
+        return " Position: [" + positionX + "," + positionY + "]" + 
+        		" Velocity: [" + velocityX + "," + velocityY + "]";
+    }
 
 }

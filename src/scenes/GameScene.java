@@ -68,16 +68,6 @@ public class GameScene {
 				detectCollision();
 				renderScreen();
 			}
-			
-			private void detectCollision() {
-				for(Platform p : platformsList){
-					if(player.intersects(p)){
-						System.out.println("collision");
-						player.addVelocity_Y(player.getVelocity_Y() * -1);
-					}
-				}
-				
-			}
 
 			private void renderScreen() {
 				gc.clearRect(0, 0, screenW, screenH);
@@ -91,6 +81,8 @@ public class GameScene {
 			}
 
 			private void handleKeyboardInput(ArrayList<String> input, long currentNanoTime) {
+				boolean collision = detectCollision();
+				System.out.println("After collision detection " + player);
 				
 				double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 				lastNanoTime = currentNanoTime;
@@ -111,19 +103,36 @@ public class GameScene {
 					player.addVelocity_Y(-300);
 					released.remove("SPACE");
 				}
-				else{
+				else if(!collision){
 					if(player.getPosition_Y() < (screenH - player.getHeight())){
 						//falling speed
-						player.addVelocity_Y( 10);
+						System.out.println("falling");
+						player.addVelocity_Y(10);
 					}
 					else if(player.getPosition_Y() > (screenH - player.getHeight())){
 						player.setPosition(player.getPosition_X(), (screenH - player.getHeight()));
 						player.addVelocity_Y(player.getVelocity_Y() * -1);
 					}
 				}
-				
 				player.update(elapsedTime);
+				System.out.println("After Update: " + player);
 			}
+
+			private boolean detectCollision() {
+				boolean collision = false;
+				
+				for(Platform p : platformsList){
+					if(player.intersects(p)){
+						System.out.println("collision");
+						player.addVelocity_Y((player.getVelocity_Y() * -1) - 10);
+						
+					}
+				}
+				
+				return collision;
+			}
+				
+
 		}.start();
 	}
 	
