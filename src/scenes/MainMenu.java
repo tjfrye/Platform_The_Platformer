@@ -46,6 +46,8 @@ public class MainMenu extends Menu{
 		GP.setBackground(new Background(new BackgroundImage (mm_bg_img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 		
 		s = new Scene(GP, screenW, screenH);
+		
+		
 
 	}
 }

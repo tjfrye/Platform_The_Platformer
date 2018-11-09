@@ -1,8 +1,14 @@
 package scenes;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.sound.sampled.AudioSystem;
+
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -50,6 +56,8 @@ public class GameScene {
 			}
 		});
 		
+		
+		
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, screenW, screenH);
 		
@@ -67,6 +75,7 @@ public class GameScene {
 				handleKeyboardInput(input, now);
 				detectCollision();
 				renderScreen();
+				playMusic();
 			}
 
 			private void renderScreen() {
@@ -102,6 +111,10 @@ public class GameScene {
 				if(released.contains("SPACE")){
 					player.addVelocity_Y(-300);
 					released.remove("SPACE");
+					String music = "resources/music/jump.wav";
+					Media sound = new Media(new File(music).toURI().toString());
+					MediaPlayer mediaplayer = new MediaPlayer(sound);
+					mediaplayer.play();
 				}
 				else if(!collision){
 					if(player.getPosition_Y() < (screenH - player.getHeight())){
@@ -130,6 +143,15 @@ public class GameScene {
 				}
 				
 				return collision;
+			}
+			
+			private void playMusic() {
+				/*
+				String music = "resources/music/Music1.wav";
+				Media sound = new Media(new File(music).toURI().toString());
+				MediaPlayer mediaplayer = new MediaPlayer(sound);
+				mediaplayer.play();
+				*/
 			}
 				
 
