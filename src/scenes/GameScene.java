@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -26,12 +27,14 @@ public class GameScene {
 	Random r = new Random();
 	int score = 0;
 	Label scoreLabel;
+	int speedIncreases = 0;
 	
 	public GameScene(int screenW, int screenH, Stage primaryStage) {
 		
 		Group root = new Group();
 		scene = new Scene(root);
 		scoreLabel = new Label("Score: " + score);
+		scoreLabel.setFont(new Font("Arial", 32));
 		root.getChildren().add(scoreLabel);
 		Canvas canvas = new Canvas(screenW, screenH);
 		root.getChildren().add(canvas);
@@ -112,45 +115,64 @@ public class GameScene {
 				
 				//pressed and released keys
 				if(released.contains("SPACE")){
-					player.addVelocity_Y(-300);
+					player.jump();
 					released.remove("SPACE");
-					String music = "resources/music/jump.wav";
-					Media sound = new Media(new File(music).toURI().toString());
-					MediaPlayer mediaplayer = new MediaPlayer(sound);
-					mediaplayer.play();
+					Media sound_jump = new Media(new File("resources/music/jump.wav").toURI().toString());
+					MediaPlayer mediaplayer_jump = new MediaPlayer(sound_jump);
+					mediaplayer_jump.play();
 				}
 				else if(!collision){
-					if(player.getPosition_Y() < (screenH - player.getHeight())){
-						//falling speed
-						player.addVelocity_Y(10);
-					}
-					else if(player.getPosition_Y() > (screenH - player.getHeight())){
+					if(player.getPosition_Y() > (screenH - player.getHeight())){
 						player.setPosition(player.getPosition_X(), (screenH - player.getHeight()));
 						player.addVelocity_Y(player.getVelocity_Y() * -1);
+						
+						System.out.println("Died");
+						primaryStage.setScene(new YouDiedMenu(screenW, screenH, primaryStage).getScene());
+						
+						//stops game loop
+						this.stop();
 					}
 				}
 				player.update(elapsedTime);
 				
 				for(Platform p : platformsList){
 					if(p.update()){
-						platformsList.remove(p);
-						platformsList.add(new Platform(screenW, r.nextInt(400) + 200, 1));
+						p.setPosition(screenW, r.nextInt(400) + 200);
 						score = score + 1;
 						scoreLabel.setText("Score: " + score);
+						
+						p.setPlatformSpeed(p.getPlatformSpeed() * 1.5);
 					}
 				}
 			}
 
 			private boolean detectCollision() {
-				boolean collision = false;
 				
 				for(Platform p : platformsList){
 					if(player.intersects(p)){
-						player.addVelocity_Y((player.getVelocity_Y() * -1) - 10);
+						//on platform
+						if(player.getPosition_X() + player.getWidth() > p.getPosition_X() && player.getPosition_Y() + player.getHeight() > p.getPosition_Y()){
+							player.addVelocity_Y((player.getVelocity_Y() * -1) - 10);
+							player.setOnPlatform(true, p.getPosition_Y());
+							return true;
+							
+						}
+						//below platform
+						else if(player.getPosition_X() > p.getPosition_X() && player.getPosition_Y() < p.getPosition_Y()){
+							player.addVelocity_Y((player.getVelocity_Y() * -1));
+							player.setPosition(player.getPosition_X(), p.getPosition_Y() + p.getHeight());
+							return false;
+						}
+						//side of platform
+						else{
+							player.addVelocity_X((player.getVelocity_X() * -1) - 10);
+							return false;
+						}
+						
 					}
 				}
 				
-				return collision;
+				return false;
 			}
 				
 
@@ -171,7 +193,7 @@ public class GameScene {
 		ArrayList<Platform> platforms = new ArrayList<Platform>();
 		
 		for(int i = 0; i < 4; i++){
-			platforms.add(new Platform(i * 250, r.nextInt(400) + 200, 1));
+			platforms.add(new Platform(i * 250, r.nextInt(400) + 200));
 		}
 		
 		return platforms;
