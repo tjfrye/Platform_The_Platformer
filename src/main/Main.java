@@ -5,12 +5,12 @@ import javafx.scene.Scene;
 
 import javafx.stage.Stage;
 import scenes.GameScene;
-import scenes.MainMenu;
+import scenes.StartMenu;
 
 public class Main extends Application {
 
 	Stage window;
-	Scene mainMenu, settingsMenu;
+	Scene login, settingsMenu;
 	
 	public static void main(String[] args){
 		launch(args);
@@ -21,10 +21,10 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		window = primaryStage;
 		
-		mainMenu = new MainMenu(800, 600, window).getScene();
+		login = new StartMenu(800, 600, window).getScene();
 		
 		//set the first scene for the window as well as setting its title
-		window.setScene(mainMenu);
+		window.setScene(login);
 		window.setTitle("Platform the Platformer");
 		window.show();
 	}
