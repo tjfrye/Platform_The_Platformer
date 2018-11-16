@@ -31,6 +31,8 @@ public class GameScene {
 	
 	public GameScene(int screenW, int screenH, Stage primaryStage) {
 		
+		System.out.println("GameScene starting");
+		
 		Group root = new Group();
 		scene = new Scene(root);
 		scoreLabel = new Label("Score: " + score);
@@ -74,7 +76,7 @@ public class GameScene {
 		player.render(gc);
 		lastNanoTime = System.nanoTime();
 		
-		playMusic();
+		playMusic("resources/music/Music1.wav", true);
 		
 		new AnimationTimer(){
 			@Override
@@ -124,6 +126,7 @@ public class GameScene {
 					if(player.getPosition_Y() > (screenH - player.getHeight() + 20)){
 						primaryStage.setScene(new YouDiedMenu(screenW, screenH, primaryStage).getScene());
 						//stops game loop
+						playMusic("resources/music/falling.wav", false);
 						this.stop();
 					}
 				}
@@ -173,14 +176,58 @@ public class GameScene {
 		}.start();
 	}
 	
-	private void playMusic() {
-		
-		String music = "resources/music/Music1.wav";
-		Media sound = new Media(new File(music).toURI().toString());
-		MediaPlayer mediaplayer = new MediaPlayer(sound);
-		mediaplayer.setCycleCount(MediaPlayer.INDEFINITE);
-		mediaplayer.play();
-		
+	private void playMusic(String resource, boolean repeat) {
+		if(repeat){
+			Media sound = new Media(new File(resource).toURI().toString());
+			MediaPlayer mediaplayer = new MediaPlayer(sound);
+			mediaplayer.setCycleCount(MediaPlayer.INDEFINITE);
+			
+			mediaplayer.setOnEndOfMedia(new Runnable() {
+
+				@Override
+				public void run() {
+					System.out.println("music ended");
+					
+				}
+				
+			});
+			
+			mediaplayer.setOnError(new Runnable() {
+
+				@Override
+				public void run() {
+					System.out.println("music error");
+					
+				}
+				
+			});
+			
+			mediaplayer.setOnStopped(new Runnable() {
+
+				@Override
+				public void run() {
+					System.out.println("music halted");
+				}
+				
+			});
+			
+			mediaplayer.setOnEndOfMedia(new Runnable() {
+
+				@Override
+				public void run() {
+					System.out.println("end of music");
+					
+				}
+				
+			});
+			
+			mediaplayer.play();
+		}
+		else{
+			MediaPlayer player = new MediaPlayer(new Media(new File(resource).toURI().toString()));
+			player.play();
+		}
+
 	}
 	
 	private ArrayList<Platform> initPlatforms() {
