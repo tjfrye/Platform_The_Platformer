@@ -4,17 +4,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.sound.sampled.AudioSystem;
-
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -25,12 +24,18 @@ public class GameScene {
 
 	Scene scene;
 	long lastNanoTime;
+	Random r = new Random();
+	int score = 0;
+	Label scoreLabel;
+	int speedIncreases = 0;
 	
 	public GameScene(int screenW, int screenH, Stage primaryStage) {
 		
 		Group root = new Group();
 		scene = new Scene(root);
-		
+		scoreLabel = new Label("Score: " + score);
+		scoreLabel.setFont(new Font("Arial", 32));
+		root.getChildren().add(scoreLabel);
 		Canvas canvas = new Canvas(screenW, screenH);
 		root.getChildren().add(canvas);
 		
@@ -69,13 +74,15 @@ public class GameScene {
 		player.render(gc);
 		lastNanoTime = System.nanoTime();
 		
+		playMusic();
+		
 		new AnimationTimer(){
 			@Override
 			public void handle(long now) {
 				handleKeyboardInput(input, now);
 				detectCollision();
 				renderScreen();
-				playMusic();
+				
 			}
 
 			private void renderScreen() {
@@ -91,7 +98,6 @@ public class GameScene {
 
 			private void handleKeyboardInput(ArrayList<String> input, long currentNanoTime) {
 				boolean collision = detectCollision();
-				System.out.println("After collision detection " + player);
 				
 				double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 				lastNanoTime = currentNanoTime;
@@ -109,61 +115,79 @@ public class GameScene {
 				
 				//pressed and released keys
 				if(released.contains("SPACE")){
-					player.addVelocity_Y(-300);
+					player.jump();
 					released.remove("SPACE");
-					String music = "resources/music/jump.wav";
-					Media sound = new Media(new File(music).toURI().toString());
-					MediaPlayer mediaplayer = new MediaPlayer(sound);
-					mediaplayer.play();
+
 				}
 				else if(!collision){
-					if(player.getPosition_Y() < (screenH - player.getHeight())){
-						//falling speed
-						System.out.println("falling");
-						player.addVelocity_Y(10);
-					}
-					else if(player.getPosition_Y() > (screenH - player.getHeight())){
-						player.setPosition(player.getPosition_X(), (screenH - player.getHeight()));
-						player.addVelocity_Y(player.getVelocity_Y() * -1);
+					//player hit bottom of screen
+					if(player.getPosition_Y() > (screenH - player.getHeight() + 20)){
+						primaryStage.setScene(new YouDiedMenu(screenW, screenH, primaryStage).getScene());
+						//stops game loop
+						this.stop();
 					}
 				}
 				player.update(elapsedTime);
-				System.out.println("After Update: " + player);
+				
+				for(Platform p : platformsList){
+					if(p.update()){
+						p.setPosition(screenW, r.nextInt(400) + 200);
+						score = score + 1;
+						scoreLabel.setText("Score: " + score);
+						
+						p.setPlatformSpeed(p.getPlatformSpeed() * 1.15);
+					}
+				}
 			}
 
 			private boolean detectCollision() {
-				boolean collision = false;
 				
 				for(Platform p : platformsList){
 					if(player.intersects(p)){
-						System.out.println("collision");
-						player.addVelocity_Y((player.getVelocity_Y() * -1) - 10);
+						//on platform
+						if(player.getPosition_X() + player.getWidth() > p.getPosition_X() && player.getPosition_Y() + player.getHeight() > p.getPosition_Y()){
+							player.addVelocity_Y((player.getVelocity_Y() * -1) - 10);
+							player.setOnPlatform(true, p.getPosition_Y());
+							return true;
+							
+						}
+						//below platform
+						else if(player.getPosition_X() > p.getPosition_X() && player.getPosition_Y() < p.getPosition_Y()){
+							player.addVelocity_Y((player.getVelocity_Y() * -1));
+							player.setPosition(player.getPosition_X(), p.getPosition_Y() + p.getHeight());
+							return false;
+						}
+						//side of platform
+						else{
+							player.addVelocity_X((player.getVelocity_X() * -1) - 10);
+							return false;
+						}
 						
 					}
 				}
 				
-				return collision;
-			}
-			
-			private void playMusic() {
-				/*
-				String music = "resources/music/Music1.wav";
-				Media sound = new Media(new File(music).toURI().toString());
-				MediaPlayer mediaplayer = new MediaPlayer(sound);
-				mediaplayer.play();
-				*/
+				return false;
 			}
 				
 
 		}.start();
 	}
 	
+	private void playMusic() {
+		
+		String music = "resources/music/Music1.wav";
+		Media sound = new Media(new File(music).toURI().toString());
+		MediaPlayer mediaplayer = new MediaPlayer(sound);
+		mediaplayer.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaplayer.play();
+		
+	}
+	
 	private ArrayList<Platform> initPlatforms() {
 		ArrayList<Platform> platforms = new ArrayList<Platform>();
-		Random r = new Random();
 		
-		for(int i = 0; i < 6; i++){
-			platforms.add(new Platform(i * 100, r.nextInt(400) + 200));
+		for(int i = 0; i < 4; i++){
+			platforms.add(new Platform(i * 250, r.nextInt(400) + 200));
 		}
 		
 		return platforms;
