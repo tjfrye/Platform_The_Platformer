@@ -117,18 +117,12 @@ public class GameScene {
 				if(released.contains("SPACE")){
 					player.jump();
 					released.remove("SPACE");
-					Media sound_jump = new Media(new File("resources/music/jump.wav").toURI().toString());
-					MediaPlayer mediaplayer_jump = new MediaPlayer(sound_jump);
-					mediaplayer_jump.play();
+
 				}
 				else if(!collision){
-					if(player.getPosition_Y() > (screenH - player.getHeight())){
-						player.setPosition(player.getPosition_X(), (screenH - player.getHeight()));
-						player.addVelocity_Y(player.getVelocity_Y() * -1);
-						
-						System.out.println("Died");
+					//player hit bottom of screen
+					if(player.getPosition_Y() > (screenH - player.getHeight() + 20)){
 						primaryStage.setScene(new YouDiedMenu(screenW, screenH, primaryStage).getScene());
-						
 						//stops game loop
 						this.stop();
 					}
@@ -141,7 +135,7 @@ public class GameScene {
 						score = score + 1;
 						scoreLabel.setText("Score: " + score);
 						
-						p.setPlatformSpeed(p.getPlatformSpeed() * 1.5);
+						p.setPlatformSpeed(p.getPlatformSpeed() * 1.15);
 					}
 				}
 			}

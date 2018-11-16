@@ -1,5 +1,10 @@
 package sprite;
 
+import java.io.File;
+
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 public class Player extends Sprite{
 	
     private double velocityX = 0;
@@ -12,6 +17,8 @@ public class Player extends Sprite{
     private double floorLeft;
     private double floorRight;
     private double gravity = 10;
+    private int jumps = 0;
+    private int maxJumps = 5;
 	
 	public Player(){
 		super();
@@ -74,11 +81,19 @@ public class Player extends Sprite{
     }
     
     public void jump(){
-    	onPlatform = false;
-    	addVelocity_Y(-1 * jumpVelocity);
+    	if(jumps < maxJumps){
+    		onPlatform = false;
+    		addVelocity_Y(-1 * jumpVelocity);
+    		jumps++;
+    		
+			Media sound_jump = new Media(new File("resources/music/jump.wav").toURI().toString());
+			MediaPlayer mediaplayer_jump = new MediaPlayer(sound_jump);
+			mediaplayer_jump.play();
+    	}
     }
 
 	public void setOnPlatform(boolean b, double platformHeight) {
+		jumps = 0;
 		onPlatform = b;
 		floorHeight = platformHeight;
 	}
