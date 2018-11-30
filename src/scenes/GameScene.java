@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
+import database.Queries;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
@@ -124,7 +125,13 @@ public class GameScene {
 				else if(!collision){
 					//player hit bottom of screen
 					if(player.getPosition_Y() > (screenH - player.getHeight() + 20)){
-						primaryStage.setScene(new YouDiedMenu(screenW, screenH, primaryStage).getScene());
+						Player.score = score;
+						if(Queries.getHighscore(Player.currentUsername) < Player.score) {
+							primaryStage.setScene(new SetHighscore(screenW, screenH, primaryStage).getScene());
+						} else {
+							primaryStage.setScene(new YouDiedMenu(screenW, screenH, primaryStage).getScene());
+
+						}
 						//stops game loop
 						playMusic("resources/music/falling.wav", false);
 						this.stop();
