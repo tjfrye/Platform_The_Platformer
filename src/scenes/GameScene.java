@@ -30,9 +30,7 @@ public class GameScene {
 	Label scoreLabel;
 	int speedIncreases = 0;
 	
-	public GameScene(int screenW, int screenH, Stage primaryStage) {
-		
-		System.out.println("GameScene starting");
+	public GameScene(int screenW, int screenH, Stage primaryStage, Player p) {
 		
 		Group root = new Group();
 		scene = new Scene(root);
@@ -69,11 +67,18 @@ public class GameScene {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, screenW, screenH);
 		
-		Player player = new Player();
+		Player player;
+		if(p != null){
+			player = p;
+		}
+		else{
+			player = new Player();
+			player.setImage(new Image("file:resources/sprites/TEST.png"));
+		}
 		
 		ArrayList<Platform> platformsList = initPlatforms();
 		
-		player.setImage(new Image("file:resources/sprites/TEST.png"));
+
 		player.render(gc);
 		lastNanoTime = System.nanoTime();
 		

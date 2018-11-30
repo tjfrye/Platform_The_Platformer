@@ -1,5 +1,7 @@
 package sprite;
 
+import java.util.Random;
+
 import javafx.scene.image.Image;
 
 public class Platform extends Sprite {
@@ -9,7 +11,16 @@ public class Platform extends Sprite {
 	
 	public Platform(int x, int y){
 		super(x, y);
-		setImage(new Image("file:resources/sprites/Platform.png"));
+		Random r = new Random();
+		if(r.nextInt(100) > 80){
+			setImage(new Image("file:resources/sprites/Platform_3.png"));
+		}
+		else if(r.nextInt(100) > 65){
+			setImage(new Image("file:resources/sprites/Platform_2.png"));
+		}
+		else{
+			setImage(new Image("file:resources/sprites/Platform_1.png"));
+		}
 		
 		this.platformSpeed = 1;
 	}

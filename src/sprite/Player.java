@@ -30,6 +30,29 @@ public class Player extends Sprite{
 		velocityY = 0;
 	}
 	
+	public Player(String name){
+		super();
+		
+		velocityX = 0;
+		velocityY = 0;
+		
+		if(name.equals("Easy Evan")){
+			this.setImage("file:resources/sprites/EasyEvan.png");
+			maxJumps = 10;
+		}
+		else if(name.equals("Medium Matt")){
+			this.setImage("file:resources/sprites/MediumMatt.png");
+			maxJumps = 5;
+		}
+		else if(name.equals("Hard Hank")){
+			this.setImage("file:resources/sprites/HardHank.png");
+			maxJumps = 2;
+		}
+		else{
+			this.setImage("file:resources/sprites/TEST.png");
+		}
+	}
+	
 	public void addVelocity_X(double x){
 		velocityX += x;
 		

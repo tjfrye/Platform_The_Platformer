@@ -28,7 +28,7 @@ public class MainMenu extends Menu{
 		Label label_name = new Label("Currently Logged in as " + Player.currentUsername + "");
 		
 		Button button_start = createButton("Start");
-		button_start.setOnAction(e -> {window.setScene(new GameScene(width, height, window).getScene());});
+		button_start.setOnAction(e -> {window.setScene(new CharacterSelect(width, height, window).getScene());});
 		
 		Button button_settings = createButton("Settings");
 		button_settings.setOnAction(e -> {window.setScene(new SettingsMenu(width, height, window).getScene());});
