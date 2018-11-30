@@ -7,6 +7,10 @@ import javafx.scene.media.MediaPlayer;
 
 public class Player extends Sprite{
 	
+	public static String currentUsername;
+	public static int score;
+	public static int difficulty;
+	
     private double velocityX = 0;
     private double velocityY = 0;
     
@@ -16,9 +20,9 @@ public class Player extends Sprite{
     private double floorHeight;
     private double floorLeft;
     private double floorRight;
-    private double gravity = 10;
+    private double gravity = 10 + difficulty;
     private int jumps = 0;
-    private int maxJumps = 5;
+    private int maxJumps = 5 - difficulty;
 	
 	public Player(){
 		super();
