@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import scenes.GameScene;
 import scenes.StartMenu;
+import database.Queries;
 
 public class Main extends Application {
 
@@ -13,6 +14,7 @@ public class Main extends Application {
 	Scene login, settingsMenu;
 	
 	public static void main(String[] args){
+		Queries.connect();
 		launch(args);
 	}
 	
@@ -28,5 +30,5 @@ public class Main extends Application {
 		window.setTitle("Platform the Platformer");
 		window.show();
 	}
-
+	
 }
