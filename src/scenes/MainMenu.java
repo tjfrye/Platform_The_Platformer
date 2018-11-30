@@ -17,12 +17,16 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import sprite.Player;
 
 public class MainMenu extends Menu{
 	
 	public MainMenu(int screenW, int screenH, Stage window){
 		super(screenW, screenH, window);
 		//create elements for the main menu scene and then add them to the scene
+		Label label_name = new Label("Currently Logged in as " + Player.currentUsername + "");
+		
 		Button button_start = createButton("Start");
 		button_start.setOnAction(e -> {window.setScene(new GameScene(width, height, window).getScene());});
 		
@@ -37,7 +41,7 @@ public class MainMenu extends Menu{
 		
 		GridPane GP = new GridPane();
 		VBox VB = new VBox(10);
-		VB.getChildren().addAll(button_start, button_settings, button_highscores, button_exit);
+		VB.getChildren().addAll(label_name, button_start, button_settings, button_highscores, button_exit);
 		GP.getChildren().add(VB);
 		GP.setAlignment(Pos.CENTER);
 				
@@ -46,8 +50,5 @@ public class MainMenu extends Menu{
 		GP.setBackground(new Background(new BackgroundImage (mm_bg_img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 		
 		s = new Scene(GP, screenW, screenH);
-		
-		
-
 	}
 }
