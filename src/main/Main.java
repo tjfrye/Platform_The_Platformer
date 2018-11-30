@@ -25,9 +25,10 @@ public class Main extends Application {
 		window = primaryStage;
 		
 		// THIS IS WHAT SHOULD BE STARTED
-		//login = new StartMenu(800, 600, window).getScene();
+		login = new StartMenu(800, 600, window).getScene();
 		
-		login = new MainMenu(800, 600, window).getScene();
+		//USE FOR TESTING WITHOUT DATABASE
+		//login = new MainMenu(800, 600, window).getScene();
 		
 		//set the first scene for the window as well as setting its title
 		window.setScene(login);
